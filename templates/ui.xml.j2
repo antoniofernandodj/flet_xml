@@ -1,0 +1,52 @@
+{%
+set paises = [
+    {"nome": "Brasil", "sigla": "br"},
+    {"nome": "Estados Unidos", "sigla": "us"},
+    {"nome": "Portugal", "sigla": "pt"},
+    {"nome": "Argentina", "sigla": "ar"},
+    {"nome": "Japão", "sigla": "jp"}
+]
+%}
+
+<Column spacing="20" alignment="center" expand="True">
+    <!-- Título -->
+    <Text value="Cadastro de Usuário" size="30" weight="bold"/>
+    <!-- Formulário em um Container com padding -->
+    <Container bgcolor="#f5f5f5">
+        <Column spacing="15" alignment="start">
+            <TextField label="Nome completo" width="300" autofocus="true"/>
+            <TextField label="E-mail" width="300"/>
+            <TextField label="Senha" password="true" can_reveal_password="true" width="300"/>
+            <Row spacing="10">
+                <Dropdown label="País" width="200">
+                    {% for pais in paises %}
+                        <dropdown.Option
+                            key="{{ pais.sigla }}"
+                            text="{{ pais.nome }}"
+                        />
+                    {% endfor %}
+                </Dropdown>
+                <Checkbox label="Aceito os termos de uso"/>
+            </Row>
+        </Column>
+    </Container>
+
+
+    <!-- Botões de ação -->
+    <Row spacing="15" alignment="center">
+        <ElevatedButton text="Cadastrar" on_click="on_submit"/>
+        <OutlinedButton text="Limpar" on_click="on_clear"/>
+        <ElevatedButton text="Sair" on_click="on_exit"/>
+        <Text value="Olá, {{ nome }}!" />
+        <Dropdown>
+            <dropdown.Option text="Item 1" />
+            <dropdown.Option text="Item 2" />
+        </Dropdown>
+    </Row>
+
+    <!-- Rodapé -->
+    <Text size="12" color="gray">
+        Versão 1.0 - Exemplo XML mais complexo
+    </Text>
+
+</Column>
