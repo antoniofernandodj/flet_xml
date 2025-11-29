@@ -36,19 +36,43 @@
                 <Text value="Dados do Cadastro:" size="18" weight="bold" color="#424242"/>
                 
                 <Row>
-                    <Text value="Nome:" width="120" weight="w500" color="#757575"/>
-                    <Text value="{{ dados.nome }}" color="#212121"/>
+                    <Text
+                        value="Nome:"
+                        width="120"
+                        weight="w500"
+                        color="#757575"
+                    />
+                    <Text
+                        value="{{ nome }}"
+                        color="#212121"
+                    />
                 </Row>
                 
                 <Row>
-                    <Text value="E-mail:" width="120" weight="w500" color="#757575"/>
-                    <Text value="{{ dados.email }}" color="#212121"/>
+                    <Text
+                        value="E-mail:"
+                        width="120"
+                        weight="w500"
+                        color="#757575"
+                    />
+                    <Text
+                        value="{{ dados.email }}"
+                        color="#212121"
+                    />
                 </Row>
                 
                 {% if dados.pais %}
                 <Row>
-                    <Text value="País:" width="120" weight="w500" color="#757575"/>
-                    <Text value="{{ dados.pais }}" color="#212121"/>
+                    <Text
+                        value="País:"
+                        width="120"
+                        weight="w500"
+                        color="#757575"
+                    />
+                    <Text
+                        value="{{ dados.pais }}"
+                        color="#212121"
+                    />
                 </Row>
                 {% endif %}
             </Column>
@@ -67,7 +91,12 @@
         </Row>
 
         <!-- Rodapé -->
-        <Text size="13" color="white" opacity="0.9" weight="w400">
+        <Text
+            size="13"
+            color="white"
+            opacity="0.9"
+            weight="w400"
+        >
             Obrigado por se cadastrar!
         </Text>
     </Column>
