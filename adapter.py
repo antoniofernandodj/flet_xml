@@ -382,6 +382,64 @@ class XMLFletAdapter:
                 field.update()
             except Exception as e:
                 logger.error(f"Erro ao atualizar campo: {e}")
+    
+    def navigate_to(
+        self,
+        template_name: str,
+        handlers: Optional[Dict[str, Callable]] = None,
+        title: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """
+        Navega para uma nova página carregando um template diferente.
+        
+        Args:
+            template_name: Nome do template a ser carregado
+            handlers: Handlers para a nova página (usa os atuais se None)
+            title: Título da nova página (mantém o atual se None)
+            context: Contexto para o template (mescla com o atual se fornecido)
+        """
+        if not self.page:
+            logger.error("Não é possível navegar: página não inicializada")
+            return
+        
+        # Limpa a página atual
+        self.page.clean()
+        self.fields.clear()
+        
+        # Atualiza configurações
+        if title:
+            self.page.title = title
+            self.title = title
+        
+        if handlers:
+            self.handlers = handlers
+        
+        if context:
+            # Mescla com o contexto atual
+            self.context = {**self.context, **context}
+        
+        # Atualiza o template
+        self.template_name = template_name
+        
+        try:
+            # Renderiza o novo template
+            template = self.env.get_template(template_name)
+            xml_string = template.render(self.context)
+            
+            logger.debug(f"Navegando para template '{template_name}'")
+        except Exception as e:
+            logger.error(f"Erro ao renderizar template '{template_name}': {e}")
+            raise
+        
+        try:
+            widgets = self.parse_xml_string(xml_string, handlers=self.handlers)
+            for w in widgets:
+                self.page.add(w)
+            logger.info(f"Página '{template_name}' carregada com sucesso")
+        except Exception as e:
+            logger.error(f"Erro ao processar XML do template '{template_name}': {e}")
+            raise
 
     def _create_callback_wrapper(self, original_handler: Callable) -> Callable:
         """

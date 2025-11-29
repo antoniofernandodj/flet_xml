@@ -1,0 +1,75 @@
+<Container 
+    bgcolor="#4caf50"
+    expand="True"
+    padding="40">
+    <Column spacing="30" alignment="center" expand="True">
+        <!-- Ícone de sucesso -->
+        <Container>
+            <Text value="✅" size="80"/>
+        </Container>
+
+        <!-- Mensagem de sucesso -->
+        <Container>
+            <Column spacing="10" alignment="center" horizontal_alignment="center">
+                <Text
+                    value="Cadastro Realizado com Sucesso!"
+                    size="32"
+                    weight="bold"
+                    color="white"
+                />
+                <Text
+                    value="Bem-vindo, {{ nome }}!"
+                    size="24"
+                    weight="w500"
+                    color="white"
+                />
+            </Column>
+        </Container>
+
+        <!-- Informações do cadastro -->
+        <Container 
+            bgcolor="white"
+            border_radius="16"
+            padding="30"
+            width="500">
+            <Column spacing="15" alignment="start">
+                <Text value="Dados do Cadastro:" size="18" weight="bold" color="#424242"/>
+                
+                <Row>
+                    <Text value="Nome:" width="120" weight="w500" color="#757575"/>
+                    <Text value="{{ dados.nome }}" color="#212121"/>
+                </Row>
+                
+                <Row>
+                    <Text value="E-mail:" width="120" weight="w500" color="#757575"/>
+                    <Text value="{{ dados.email }}" color="#212121"/>
+                </Row>
+                
+                {% if dados.pais %}
+                <Row>
+                    <Text value="País:" width="120" weight="w500" color="#757575"/>
+                    <Text value="{{ dados.pais }}" color="#212121"/>
+                </Row>
+                {% endif %}
+            </Column>
+        </Container>
+
+        <!-- Botões de ação -->
+        <Row spacing="15" alignment="center">
+            <ElevatedButton 
+                text="Voltar ao Início" 
+                on_click="on_back"
+                bgcolor="white"
+                color="#4caf50"
+                width="200"
+                height="48"
+            />
+        </Row>
+
+        <!-- Rodapé -->
+        <Text size="13" color="white" opacity="0.9" weight="w400">
+            Obrigado por se cadastrar!
+        </Text>
+    </Column>
+</Container>
+
