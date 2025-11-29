@@ -1,12 +1,14 @@
 import ast
 import inspect
 import logging
+import uuid
 import xml.etree.ElementTree as ET
 from typing import Any, Callable, Dict, List, Optional, Union
 
 import flet  # type: ignore
 from flet import Page
 from jinja2 import Environment, FileSystemLoader
+from window_manager import get_window_manager
 
 # Configuração de logging
 logger = logging.getLogger(__name__)
@@ -77,6 +79,7 @@ class XMLFletAdapter:
         if not template_name:
             raise ValueError("template_name não pode estar vazio")
         
+        self.main_window_id = f"main_{uuid.uuid4().hex[:8]}"
         self.template_name = template_name
         self.handlers = handlers
         self.title = title
@@ -84,6 +87,8 @@ class XMLFletAdapter:
         self.context = context or {}
         self.fields: Dict[str, Any] = {}  # Armazena referências aos campos por id/name
         self.page: Optional[Page] = None
+        self.window_manager = get_window_manager()  # Gerenciador de janelas
+        self.window_id: Optional[str] = None  # ID da janela atual
         
         # Log dos handlers disponíveis
         if isinstance(handlers, dict):
@@ -110,6 +115,11 @@ class XMLFletAdapter:
         if not hasattr(page, 'data') or page.data is None or not isinstance(page.data, dict):
             page.data = {}
         page.data['adapter'] = self
+        page.data['window_manager'] = self.window_manager
+        
+        # Registra a janela no gerenciador se ainda não estiver registrada
+        if self.window_id:
+            self.window_manager.register_window(self.window_id, page, self)
 
         try:
             # Renderiza o template Jinja
@@ -422,7 +432,7 @@ class XMLFletAdapter:
         handlers: Optional[Union[Dict[str, Callable], Any]] = None,
         title: Optional[str] = None,
         context: Optional[Dict[str, Any]] = None,
-    ) -> None:
+    ) -> bool:
         """
         Navega para uma nova página carregando um template diferente.
         
@@ -431,10 +441,13 @@ class XMLFletAdapter:
             handlers: Handlers para a nova página (usa os atuais se None)
             title: Título da nova página (mantém o atual se None)
             context: Contexto para o template (mescla com o atual se fornecido)
+            
+        Returns:
+            True se a navegação foi bem-sucedida, False caso contrário
         """
         if not self.page:
             logger.error("Não é possível navegar: página não inicializada")
-            return
+            return False
         
         # Limpa a página atual
         self.page.clean()
@@ -470,9 +483,110 @@ class XMLFletAdapter:
             for w in widgets:
                 self.page.add(w)
             logger.info(f"Página '{template_name}' carregada com sucesso")
+            return True
         except Exception as e:
             logger.error(f"Erro ao processar XML do template '{template_name}': {e}")
-            raise
+            return False
+
+    def open_window(
+        self,
+        template_name: str,
+        handlers: Optional[Union[Dict[str, Callable], Any]] = None,
+        title: str = "Nova Janela",
+        context: Optional[Dict[str, Any]] = None,
+        window_id: Optional[str] = None,
+        width: int = 800,
+        height: int = 600,
+    ) -> Optional[str]:
+        """
+        Abre uma nova janela com um template (mantém a janela atual aberta).
+        
+        Args:
+            template_name: Nome do template a ser carregado
+            handlers: Handlers para a nova janela (usa os atuais se None)
+            title: Título da nova janela
+            context: Contexto para o template
+            window_id: ID único para a janela (gerado automaticamente se None)
+            width: Largura da janela
+            height: Altura da janela
+            
+        Returns:
+            ID da janela criada ou None em caso de erro
+        """
+        if handlers is None:
+            handlers = self.handlers
+        
+        return self.window_manager.open_new_window(
+            template_name=template_name,
+            handlers=handlers,
+            title=title,
+            context=context,
+            window_id=window_id,
+            width=width,
+            height=height,
+            templates_dir=self.env.loader.searchpath[0] if hasattr(self.env.loader, 'searchpath') else "templates"
+        )
+    
+    def replace_current_window(
+        self,
+        template_name: str,
+        handlers: Optional[Union[Dict[str, Callable], Any]] = None,
+        title: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> bool:
+        """
+        Substitui o conteúdo da janela atual por um novo template.
+        
+        Args:
+            template_name: Nome do novo template
+            handlers: Handlers para o novo template (usa os atuais se None)
+            title: Título da janela (mantém o atual se None)
+            context: Contexto para o template (mescla com o atual se fornecido)
+            
+        Returns:
+            True se a substituição foi bem-sucedida, False caso contrário
+        """
+        if not self.page:
+            logger.error("Não é possível substituir janela: página não inicializada")
+            return False
+        
+        # Se temos um window_id, usa o método do gerenciador
+        if self.window_id:
+            return self.window_manager.replace_window(
+                window_id=self.window_id,
+                template_name=template_name,
+                handlers=handlers or self.handlers,
+                title=title,
+                context=context
+            )
+        else:
+            # Caso contrário, usa navigate_to (comportamento padrão)
+            return self.navigate_to(
+                template_name=template_name,
+                handlers=handlers,
+                title=title,
+                context=context
+            ) is not None
+    
+    def close_current_window(self) -> bool:
+        """
+        Fecha a janela atual.
+        
+        Returns:
+            True se a janela foi fechada, False caso contrário
+        """
+        if not self.page:
+            return False
+        
+        if self.window_id:
+            return self.window_manager.close_window(self.window_id)
+        else:
+            try:
+                self.page.window.close()
+                return True
+            except Exception as e:
+                logger.error(f"Erro ao fechar janela: {e}")
+                return False
 
     def _create_callback_wrapper(self, original_handler: Callable) -> Callable:
         """

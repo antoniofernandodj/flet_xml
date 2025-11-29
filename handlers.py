@@ -102,3 +102,69 @@ class Handlers:
             )
         else:
             print("⚠️  Erro: adapter não encontrado!")
+    
+    def on_open_new_window(self, e: flet.ControlEvent, field_data: dict = None):
+        """
+        Exemplo: Abre uma nova janela com a página de sucesso (mantém a janela atual aberta).
+        """
+        adapter = None
+        if hasattr(e.control.page, 'data') and isinstance(e.control.page.data, dict):
+            adapter = e.control.page.data.get('adapter')
+        
+        if adapter:
+            # Prepara contexto para a nova janela
+            context = {
+                "nome": field_data.get('nome', 'Visitante') if field_data else "Visitante",
+                "dados": {
+                    "nome": field_data.get('nome', '') if field_data else '',
+                    "email": field_data.get('email', '') if field_data else '',
+                }
+            }
+            
+            # Abre uma nova janela (a janela atual permanece aberta)
+            window_id = adapter.open_window(
+                template_name="success.xml.j2",
+                title="Nova Janela - Sucesso",
+                context=context,
+                width=600,
+                height=500
+            )
+            
+            if window_id:
+                print(f"✅ Nova janela '{window_id}' aberta!")
+            else:
+                print("⚠️  Erro ao abrir nova janela!")
+        else:
+            print("⚠️  Erro: adapter não encontrado!")
+    
+    def on_replace_window(self, e: flet.ControlEvent, field_data: dict = None):
+        """
+        Exemplo: Substitui a janela atual pela página de sucesso.
+        """
+        adapter = None
+        if hasattr(e.control.page, 'data') and isinstance(e.control.page.data, dict):
+            adapter = e.control.page.data.get('adapter')
+        
+        if adapter:
+            # Prepara contexto para substituir a janela
+            context = {
+                "nome": field_data.get('nome', 'Visitante') if field_data else "Visitante",
+                "dados": {
+                    "nome": field_data.get('nome', '') if field_data else '',
+                    "email": field_data.get('email', '') if field_data else '',
+                }
+            }
+            
+            # Substitui a janela atual
+            success = adapter.replace_current_window(
+                template_name="success.xml.j2",
+                title="Janela Substituída - Sucesso",
+                context=context
+            )
+            
+            if success:
+                print("✅ Janela atual substituída!")
+            else:
+                print("⚠️  Erro ao substituir janela!")
+        else:
+            print("⚠️  Erro: adapter não encontrado!")
