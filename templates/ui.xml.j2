@@ -14,11 +14,11 @@ set paises = [
     <!-- Formulário em um Container com padding -->
     <Container bgcolor="#f5f5f5">
         <Column spacing="15" alignment="start">
-            <TextField label="Nome completo" width="300" autofocus="true"/>
-            <TextField label="E-mail" width="300"/>
-            <TextField label="Senha" password="true" can_reveal_password="true" width="300"/>
+            <TextField id="nome" label="Nome completo" width="300" autofocus="true"/>
+            <TextField id="email" label="E-mail" width="300"/>
+            <TextField id="senha" label="Senha" password="true" can_reveal_password="true" width="300"/>
             <Row spacing="10">
-                <Dropdown label="País" width="200">
+                <Dropdown id="pais" label="País" width="200">
                     {% for pais in paises %}
                         <dropdown.Option
                             key="{{ pais.sigla }}"
@@ -26,7 +26,7 @@ set paises = [
                         />
                     {% endfor %}
                 </Dropdown>
-                <Checkbox label="Aceito os termos de uso"/>
+                <Checkbox id="termos" label="Aceito os termos de uso"/>
             </Row>
         </Column>
     </Container>

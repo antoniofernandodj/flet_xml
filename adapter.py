@@ -17,6 +17,12 @@ CHILD_ATTRS = {
     "Dropdown": "options",   # <- Dropdown usa `options`
 }
 
+# Tipos de campos que podem ter valores extraídos
+FIELD_TYPES = {
+    "TextField", "Text", "Dropdown", "Checkbox", 
+    "Switch", "Slider", "Radio", "RadioGroup"
+}
+
 
 class XMLFletAdapter:
     def __init__(
@@ -32,15 +38,26 @@ class XMLFletAdapter:
         handlers: dicionário de callbacks { "nome": func }
         title: título da página
         templates_dir: pasta onde ficam os templates (default: templates/)
+        context: contexto para renderização do template Jinja
         """
         self.template_name = template_name
         self.handlers = handlers
         self.title = title
         self.env = Environment(loader=FileSystemLoader(templates_dir))
         self.context = context
+        self.fields: Dict[str, Any] = {}  # Armazena referências aos campos por id/name
+        self.page: Optional[Page] = None
 
     def __call__(self, page: Page):
+        self.page = page
         page.title = self.title
+        self.fields.clear()  # Limpa campos anteriores
+        
+        # Armazena referência ao adapter na página para acesso nos callbacks
+        # Garante que page.data seja um dicionário
+        if not hasattr(page, 'data') or page.data is None or not isinstance(page.data, dict):
+            page.data = {}
+        page.data['adapter'] = self
 
         # Renderiza o template Jinja
         template = self.env.get_template(self.template_name)
@@ -83,15 +100,84 @@ class XMLFletAdapter:
                 return False
         return False
 
+    def _get_field_value(self, field: Any) -> Any:
+        """Extrai o valor de um campo baseado no seu tipo"""
+        if hasattr(field, 'value'):
+            return field.value
+        elif hasattr(field, 'text'):
+            return field.text
+        elif hasattr(field, 'data'):
+            return field.data
+        return None
+
+    def get_field_data(self, field_ids: Optional[list[str]] = None) -> Dict[str, Any]:
+        """
+        Retorna um dicionário com os valores dos campos identificados.
+        
+        Args:
+            field_ids: Lista de IDs/names dos campos a retornar. 
+                      Se None, retorna todos os campos.
+        
+        Returns:
+            Dicionário {id: value} com os valores dos campos
+        """
+        if field_ids is None:
+            field_ids = list(self.fields.keys())
+        
+        data = {}
+        for field_id in field_ids:
+            if field_id in self.fields:
+                field = self.fields[field_id]
+                data[field_id] = self._get_field_value(field)
+        return data
+
+    def get_field(self, field_id: str) -> Optional[Any]:
+        """
+        Retorna a referência direta a um campo específico.
+        
+        Args:
+            field_id: ID ou name do campo
+        
+        Returns:
+            Referência ao campo ou None se não encontrado
+        """
+        return self.fields.get(field_id)
+
+    def _create_callback_wrapper(self, original_handler: Callable) -> Callable:
+        """Cria um wrapper para o callback que passa os dados dos campos"""
+        def wrapper(e: flet.ControlEvent):
+            # Passa o evento original e os dados dos campos
+            field_data = self.get_field_data()
+            # Tenta chamar com os dados dos campos se o handler aceitar
+            try:
+                sig = inspect.signature(original_handler)
+                params = list(sig.parameters.keys())
+                if len(params) > 1:
+                    # Handler aceita mais de um parâmetro, passa os dados
+                    return original_handler(e, field_data)
+                else:
+                    # Handler aceita apenas o evento
+                    return original_handler(e)
+            except Exception:
+                # Fallback: chama apenas com o evento
+                return original_handler(e)
+        return wrapper
+
     def _instantiate_element(self, elem: ET.Element, handlers: Optional[Dict[str, Callable]] = None):
         tag = elem.tag
         cls = self._get_class(tag)
 
         kwargs: Dict[str, Any] = {}
+        field_id = None  # ID ou name do campo para armazenar referência
+        
         for k, v in elem.attrib.items():
             if k.startswith("on_"):
                 kwargs[k] = v
                 continue
+            # Captura id ou name para armazenar referência ao campo (mas não adiciona aos kwargs)
+            if k in ("id", "name") and tag in FIELD_TYPES:
+                field_id = v
+                continue  # Não adiciona id/name aos kwargs do widget
             kwargs[k] = self._parse_attr_value(v)
 
         children = []
@@ -141,10 +227,17 @@ class XMLFletAdapter:
         except TypeError as e:
             raise TypeError(f"Erro ao criar {tag}: {e}")
 
+        # Armazena referência ao campo se tiver id/name
+        if field_id:
+            self.fields[field_id] = instance
+
+        # Processa eventos e cria wrappers para callbacks
         for ev_name, ev_val in event_attrs.items():
             handler = handlers.get(ev_val) if handlers else None
             if handler:
-                self._bind_event(instance, ev_name, handler)
+                # Cria wrapper que passa os dados dos campos
+                wrapped_handler = self._create_callback_wrapper(handler)
+                self._bind_event(instance, ev_name, wrapped_handler)
 
         return instance
 
