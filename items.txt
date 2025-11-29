@@ -1,0 +1,344 @@
+Layout {
+    📄️ Card
+    A material design card: a panel with slightly rounded corners and an elevation shadow.
+
+    📄️ Column
+    A control that displays its children in a vertical array.
+
+    📄️ Container
+    Container allows to decorate a control with background color and border and position it with padding, margin and alignment.
+
+    📄️ CupertinoListTile
+    An iOS-style list tile. The CupertinoListTile is a Cupertino equivalent of Material ListTile.
+
+    📄️ DataTable
+    A Material Design data table.
+
+    📄️ Dismissible
+    A control that can be dismissed by dragging in the indicated dismiss_direction.
+
+    📄️ Divider
+    A thin horizontal line, with padding on either side.
+
+    📄️ ExpansionPanelList
+    A material expansion panel list that lays out its children and animates expansions.
+
+    📄️ ExpansionTile
+    A single-line ListTile with an expansion arrow icon that expands or collapses the tile to reveal or hide its children.
+
+    📄️ GridView
+    A scrollable, 2D array of controls.
+
+    📄️ ListTile
+    A single fixed-height row that typically contains some text as well as a leading or trailing icon.
+
+    📄️ ListView
+    A scrollable list of controls arranged linearly.
+
+    📄️ Page
+    Page is a container for View controls.
+
+    📄️ Pagelet
+    Pagelet implements the basic Material Design visual layout structure.
+
+    📄️ Placeholder
+    A control that draws a box that represents where other widgets will one day be added.
+
+    📄️ ReorderableListView
+    A control that allows the user to reorder its children by dragging a handle.
+
+    📄️ ResponsiveRow
+    ResponsiveRow borrows the idea of grid layout from Bootstrap web framework.
+
+    📄️ Row
+    A control that displays its children in a horizontal array.
+
+    📄️ SafeArea
+    A control that insets its content by sufficient padding to avoid intrusions by the operating system.
+
+    📄️ Stack
+    A control that positions its children on top of each other.
+
+    📄️ Tabs
+    The Tabs control is used for navigating frequently accessed, distinct content categories. Tabs allow for navigation between two or more content views and relies on text headers to articulate the different sections of content.
+
+    📄️ VerticalDivider
+    A thin vertical line, with padding on either side.
+
+    📄️ View
+    View is the top most container for all other controls.
+}
+
+
+Navigation {
+    📄️ AppBar
+    A material design app bar.
+
+    📄️ BottomAppBar
+    A material design bottom app bar.
+
+    📄️ CupertinoAppBar
+    An iOS-styled application bar.
+
+    📄️ CupertinoNavigationBar
+    An iOS-styled bottom navigation tab bar.
+
+    📄️ MenuBar
+    A menu bar that manages cascading child menus.
+
+    📄️ NavigationBar
+    Material 3 Navigation Bar component.
+
+    📄️ NavigationDrawer
+    Material Design Navigation Drawer component.
+
+    📄️ NavigationRail
+    A material widget that is meant to be displayed at the left or right of an app to na
+}
+
+Information Displays {
+    🗃️ Ads
+    2 items
+
+    📄️ Canvas
+    Canvas is a control for drawing arbitrary graphics using a set of primitives or "shapes" such as line, arc, path and text.
+
+    📄️ CircleAvatar
+    A circle that represents a user.
+
+    📄️ CupertinoActivityIndicator
+    An iOS-style activity indicator that spins clockwise.
+
+    📄️ Icon
+    Displays a Material icon.
+
+    📄️ Image
+    An image is a graphic representation of something (e.g photo or illustration).
+
+    🗃️ Map
+    8 items
+
+    📄️ Markdown
+    Control for rendering text in markdown format.
+
+    📄️ Text
+    Text is a control for displaying text.
+
+    📄️ ProgressBar
+    A material design linear progress indicator, also known as a progress bar.
+
+    📄️ ProgressRing
+    A material design circular progress indicator, which spins to indicate that the application is busy.
+
+    📄️ WebView
+}
+
+Buttons {
+    Cupertino
+
+    CupertinoFilled
+
+    Elevated
+
+    Filled
+
+    Filled Tonal
+
+    Floating Action
+
+    Icon Button
+
+    Outlined
+
+    Popup Menu
+
+    Text Button
+}
+
+Input and Selections {
+    📄️ AutoComplete
+    Helps the user make a selection by entering some text and choosing from among a list of suggestions.
+
+    📄️ AutofillGroup
+    Groups autofillable controls such as TextField
+
+    📄️ Checkbox
+    Checkbox allows to select one or more items from a group, or switch between two mutually exclusive options (checked or unchecked, on or off).
+
+    📄️ Chip
+    Chips are compact elements that represent an attribute, text, entity, or action.
+
+    📄️ CupertinoCheckbox
+    A macOS style checkbox. Checkbox allows to select one or more items from a group, or switch between two mutually exclusive options (checked or unchecked, on or off).
+
+    📄️ CupertinoRadio
+    A macOS style radio button. Radio buttons let people select a single option from two or more choices.
+
+    📄️ CupertinoSlider
+    An macOS style slider. It provides a visual indication of adjustable content, as well as the current setting in the total range of content.
+
+    📄️ CupertinoSwitch
+    An iOS-style switch.
+
+    📄️ CupertinoTextField
+    An iOS-style text field.
+
+    📄️ Dropdown
+    Dropdown is used to help people make a choice from a menu and put the selected item into the text input field. It's also possible to filter the list based on the text input or search one item in the menu list.
+
+    📄️ DropdownM2
+    A material design button for selecting from a list of items.
+
+    📄️ Radio
+    Radio buttons let people select a single option from two or more choices.
+
+    📄️ RangeSlider
+    A Material Design range slider. Used to select a range from a range of values.
+
+    📄️ SearchBar
+    A Material Design search bar. It visually looks like a TextField.
+
+    📄️ Slider
+    A slider provides a visual indication of adjustable content, as well as the current setting in the total range of content.
+
+    📄️ Switch
+    A toggle represents a physical switch that allows someone to choose between two mutually exclusive options.
+
+    📄️ TextField
+    A material design text field.
+}
+
+
+Dialogs, Alerts and Panels {
+    📄️ AlertDialog
+    A material design alert dialog.
+
+    📄️ Banner
+    A banner displays an important, succinct message, and provides actions for users to address (or dismiss the banner). A user action is required for it to be dismissed.
+
+    📄️ BottomSheet
+    Shows a modal Material Design bottom sheet.
+
+    📄️ CupertinoActionSheet
+    An iOS-style action sheet.
+
+    📄️ CupertinoAlertDialog
+    An iOS-style alert dialog.
+
+    📄️ CupertinoBottomSheet
+    An iOS-style bottom sheet.
+
+    📄️ CupertinoContextMenu
+    A full-screen modal route that opens when it's content is long-pressed.
+
+    📄️ CupertinoDatePicker
+    An iOS-style date and time picker dialog.
+
+    📄️ CupertinoPicker
+    An iOS-styled picker.
+
+    📄️ CupertinoTimerPicker
+    A countdown timer picker in iOS style.
+
+    📄️ DatePicker
+    A Material-style date picker dialog.
+
+    📄️ SnackBar
+    A lightweight message with an optional action which briefly displays at the bottom of the screen.
+
+    📄️ TimePicker
+    A Material-style time picker dialog.
+}
+
+Charts {
+    📄️ BarChart
+    Draws a bar chart.
+
+    📄️ LineChart
+    Draws a line chart.
+
+    📄️ MatplotlibChart
+    Displays Matplotlib chart.
+
+    📄️ PieChart
+    Draws a pie chart.
+
+    📄️ PlotlyChart
+    Displays Plotly chart.
+}
+
+Animations {
+    📄️ AnimatedSwitcher
+    A control that by default does a cross-fade between a new control and the control previously set on the AnimatedSwitcher as a content.
+
+    📄️ Lottie
+    Displays an animation from a Lottie file (URL or local file).
+
+    📄️ Rive
+    Displays an animation from a Rive file (URL or local file).
+}
+
+Utility {
+    📄️ Audio
+    A control to simultaneously play multiple audio files. Works on macOS, Linux, Windows, iOS, Android and web.
+
+    📄️ AudioRecorder
+    Audio recorder from microphone to a given file path. Works on macOS, Linux, Windows, iOS, Android and web.
+
+    📄️ Draggable
+    A control that can be dragged from to a DragTarget.
+
+    📄️ DragTarget
+    A control that completes drag operation when a Draggable widget is dropped.
+
+    📄️ FilePicker
+    A control that allows you to use the native file explorer to pick single or multiple files, with extensions filtering support and upload.
+
+    📄️ Flashlight
+    A control to use FlashLight. Works on iOS and Android. Based on torchlight Flutter widget.
+
+    📄️ FletApp
+    Renders another Flet app in the current app, similar to HTML IFrame, but for Flet.
+
+    📄️ Geolocator
+    Geolocator fetches Position from device GPS. Works on macOS, Windows, iOS, Android and web.
+
+    📄️ GestureDetector
+    A control that detects gestures.
+
+    📄️ HapticFeedback
+    Allows access to the haptic feedback interface on the device.
+
+    📄️ InteractiveViewer
+    Allows users to pan, zoom, and rotate the provided content.
+
+    📄️ MergeSemantics
+    A control that merges the semantics of its descendants.
+
+    📄️ PermissionHandler
+    PermissionHandler can check and/or request permissions from the running device for access to various components. Works
+
+    📄️ SelectionArea
+    Flet controls are not selectable by default. SelectionArea is used to enable selection for its content.
+
+    📄️ Semantics
+    A control that annotates the control tree with a description of the meaning of the widgets.
+
+    📄️ SemanticsService
+    Allows access to the platform's accessibility services.
+
+    📄️ ShaderMask
+    A control that applies a mask generated by a shader to its child.
+
+    📄️ ShakeDetector
+    Detects phone shakes.
+
+    📄️ TransparentPointer
+    TransparentPointer is the solution to "How to pass through all gestures between two widgets in Stack" problem.
+
+    📄️ Video
+    Video playing control.
+
+    📄️ WindowDragArea
+    A control for drag to move, maximize and restore application window.
+}
