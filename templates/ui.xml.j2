@@ -1,52 +1,139 @@
 {%
-set paises = [
-    {"nome": "Brasil", "sigla": "br"},
-    {"nome": "Estados Unidos", "sigla": "us"},
-    {"nome": "Portugal", "sigla": "pt"},
-    {"nome": "Argentina", "sigla": "ar"},
-    {"nome": "Japão", "sigla": "jp"}
-]
+    set paises = [
+        {"nome": "Brasil", "sigla": "br"},
+        {"nome": "Estados Unidos", "sigla": "us"},
+        {"nome": "Portugal", "sigla": "pt"},
+        {"nome": "Argentina", "sigla": "ar"},
+        {"nome": "Japão", "sigla": "jp"}
+    ]
 %}
 
-<Column spacing="20" alignment="center" expand="True">
-    <!-- Título -->
-    <Text value="Cadastro de Usuário" size="30" weight="bold"/>
-    <!-- Formulário em um Container com padding -->
-    <Container bgcolor="#f5f5f5">
-        <Column spacing="15" alignment="start">
-            <TextField id="nome" label="Nome completo" width="300" autofocus="true"/>
-            <TextField id="email" label="E-mail" width="300"/>
-            <TextField id="senha" label="Senha" password="true" can_reveal_password="true" width="300"/>
-            <Row spacing="10">
-                <Dropdown id="pais" label="País" width="200">
-                    {% for pais in paises %}
-                        <dropdown.Option
-                            key="{{ pais.sigla }}"
-                            text="{{ pais.nome }}"
+<Container 
+    bgcolor="#667eea"
+    expand="True"
+    padding="40">
+    <Column spacing="30" alignment="center" expand="True">
+        <!-- Cabeçalho com saudação -->
+        <Container>
+            <Column spacing="8" alignment="center" horizontal_alignment="center">
+                <Text
+                    value="👋 Olá, {{ nome }}!"
+                    size="20"
+                    weight="w500"
+                    color="#fff"
+                />
+                <Text
+                    value="Cadastro de Usuário"
+                    size="38"
+                    weight="bold"
+                />
+                <Text
+                    value="Preencha os dados abaixo para criar sua conta"
+                    size="15"
+                    opacity="0.9"
+                />
+            </Column>
+        </Container>
+
+        <!-- Card do formulário -->
+        <Container 
+            bgcolor="white"
+            border_radius="16"
+            padding="35"
+            width="480">
+            <Column spacing="22" alignment="start">
+                <TextField 
+                    id="nome" 
+                    label="Nome completo" 
+                    width="410" 
+                    autofocus="true"
+                    border_color="#e0e0e0"
+                    focused_border_color="#667eea"
+                    border_width="1"
+                    border_radius="8"
+                />
+                
+                <TextField 
+                    id="email" 
+                    label="E-mail" 
+                    width="410"
+                    border_color="#e0e0e0"
+                    focused_border_color="#667eea"
+                    border_width="1"
+                    border_radius="8"
+                />
+                
+                <TextField 
+                    id="senha" 
+                    label="Senha" 
+                    password="true" 
+                    can_reveal_password="true" 
+                    width="410"
+                    border_color="#e0e0e0"
+                    focused_border_color="#667eea"
+                    border_width="1"
+                    border_radius="8"
+                />
+                
+                <Row spacing="20" alignment="start" wrap="false">
+                    <Dropdown 
+                        id="pais" 
+                        label="País" 
+                        width="220"
+                        border_color="#e0e0e0"
+                        focused_border_color="#667eea"
+                        border_width="1"
+                        border_radius="8">
+                        {% for pais in paises %}
+                            <dropdown.Option
+                                key="{{ pais.sigla }}"
+                                text="{{ pais.nome }}"
+                            />
+                        {% endfor %}
+                    </Dropdown>
+                    
+                    <Container expand="True" padding="10">
+                        <Checkbox 
+                            id="termos" 
+                            label="Aceito os termos de uso"
                         />
-                    {% endfor %}
-                </Dropdown>
-                <Checkbox id="termos" label="Aceito os termos de uso"/>
-            </Row>
-        </Column>
-    </Container>
+                    </Container>
+                </Row>
+            </Column>
+        </Container>
 
+        <!-- Botões de ação -->
+        <Row spacing="18" alignment="center">
+            <ElevatedButton 
+                text="Cadastrar" 
+                on_click="on_submit"
+                bgcolor="#667eea"
+               
+                width="150"
+                height="48"
+            />
+            
+            <OutlinedButton 
+                text="Limpar" 
+                on_click="on_clear"
+               
+                width="150"
+                height="48"
+            />
+            
+            <ElevatedButton 
+                text="Sair" 
+                on_click="on_exit"
+                bgcolor="#f44336"
+               
+                width="150"
+                height="48"
+            />
+        </Row>
 
-    <!-- Botões de ação -->
-    <Row spacing="15" alignment="center">
-        <ElevatedButton text="Cadastrar" on_click="on_submit"/>
-        <OutlinedButton text="Limpar" on_click="on_clear"/>
-        <ElevatedButton text="Sair" on_click="on_exit"/>
-        <Text value="Olá, {{ nome }}!" />
-        <Dropdown>
-            <dropdown.Option text="Item 1" />
-            <dropdown.Option text="Item 2" />
-        </Dropdown>
-    </Row>
-
-    <!-- Rodapé -->
-    <Text size="12" color="gray">
-        Versão 1.0 - Exemplo XML mais complexo
-    </Text>
-
-</Column>
+        <!-- Rodapé -->
+        <Text size="13" opacity="0.8" weight="w400">
+            Versão 1.0 - Sistema de Cadastro
+        </Text>
+    </Column>
+</Container>

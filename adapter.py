@@ -19,8 +19,14 @@ CHILD_ATTRS = {
 
 # Tipos de campos que podem ter valores extraídos
 FIELD_TYPES = {
-    "TextField", "Text", "Dropdown", "Checkbox", 
-    "Switch", "Slider", "Radio", "RadioGroup"
+    "TextField",
+    "Text",
+    "Dropdown",
+    "Checkbox", 
+    "Switch",
+    "Slider",
+    "Radio",
+    "RadioGroup"
 }
 
 
@@ -102,6 +108,7 @@ class XMLFletAdapter:
 
     def _get_field_value(self, field: Any) -> Any:
         """Extrai o valor de um campo baseado no seu tipo"""
+        print({'field': field})
         if hasattr(field, 'value'):
             return field.value
         elif hasattr(field, 'text'):
@@ -124,6 +131,7 @@ class XMLFletAdapter:
         if field_ids is None:
             field_ids = list(self.fields.keys())
         
+        print({'field_ids': field_ids})
         data = {}
         for field_id in field_ids:
             if field_id in self.fields:
@@ -224,8 +232,9 @@ class XMLFletAdapter:
                 instance = cls(**kwargs, **{child_attr: children})
             else:
                 instance = cls(**kwargs, **passed_children_kwargs)
-        except TypeError as e:
-            raise TypeError(f"Erro ao criar {tag}: {e}")
+        except Exception as e:
+            ExceptionType = type(e)
+            raise ExceptionType(f"Erro ao criar {tag}: {e}")
 
         # Armazena referência ao campo se tiver id/name
         if field_id:
