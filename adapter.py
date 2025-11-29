@@ -58,10 +58,10 @@ class XMLFletAdapter:
     def __init__(
         self,
         template_name: str,
-        handlers: Union[Dict[str, Callable], Any],
         title: str,
         templates_dir: str = "templates",
         context: Optional[Dict[str, Any]] = None,
+        handlers: Union[Dict[str, Callable], Any] = {},
     ):
         """
         Inicializa o adaptador XML-Flet.
@@ -706,9 +706,46 @@ class XMLFletAdapter:
         child_attr = CHILD_ATTRS.get(tag)
         try:
             if child_attr:
-                instance = cls(**kwargs, **{child_attr: children})
+                
+                # Se houver tema
+                theme = None
+                theme_string = kwargs.pop('style', None)
+                if theme_string:
+                    try:
+                        theme = create_theme_from_string(theme_string)
+                    except Exception:
+                        pass
+
+                # Cria a instância do widget
+                if child_attr and children:
+                    instance = cls(**kwargs, **{child_attr: children})
+                else:
+                    instance = cls(**kwargs)
+
+                # Aplica tema se houver
+                if theme:
+                    instance.theme = theme
+
             else:
                 instance = cls(**kwargs, **passed_children_kwargs)
+                # Se houver tema
+                theme = None
+                theme_string = kwargs.pop('style', None)
+                if theme_string:
+                    try:
+                        theme = create_theme_from_string(theme_string)
+                    except Exception:
+                        pass
+
+                # Cria a instância do widget
+                if child_attr and children:
+                    instance = cls(**kwargs, **{child_attr: children})
+                else:
+                    instance = cls(**kwargs)
+
+                # Aplica tema se houver
+                if theme:
+                    instance.theme = theme
         except TypeError as e:
             # Erro mais informativo para problemas de tipo
             logger.error(f"Erro de tipo ao criar {tag}: {e}")
@@ -766,3 +803,27 @@ class XMLFletAdapter:
                 raise
         
         return widgets
+
+
+def create_theme_from_string(theme_string, color=flet.Colors.GREEN):
+    """
+    Cria um ft.Theme a partir de uma string no formato 'TextTheme.HEADLINE_SMALL'
+    """
+    # Separar a parte da classe e o atributo
+    if '.' not in theme_string:
+        raise ValueError("A string deve estar no formato 'TextTheme.ATRIBUTO'")
+    
+    class_name, attr_name = theme_string.split('.')
+    
+    # Pegar a classe do módulo flet
+    cls = getattr(flet, class_name, None)
+    if cls is None:
+        raise ValueError(f"Classe '{class_name}' não encontrada em flet")
+    
+    # Criar o TextTheme dinamicamente com o atributo desejado
+    text_theme_kwargs = {attr_name.lower(): flet.TextStyle(color=color)}
+    text_theme = cls(**text_theme_kwargs)
+    
+    # Criar o Theme com o TextTheme
+    theme = flet.Theme(text_theme=text_theme)
+    return theme

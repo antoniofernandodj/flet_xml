@@ -1,0 +1,163 @@
+<Column>
+    <Text value="Layout Components" style="TextTheme.headline_small" />
+    
+    <Card>Cartão</Card>
+    <Column>Coluna</Column>
+    <CupertinoListTile>
+        CupertinoListTile
+    </CupertinoListTile>
+    <DataTable>
+        <DataColumn label="label">
+        </DataColumn>
+    </DataTable>
+    <!-- <ListView>
+        <Text value="Card" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Column" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Container" style="TextTheme.BODY_MEDIUM" />
+        <Text value="CupertinoListTile" style="TextTheme.BODY_MEDIUM" />
+        <Text value="DataTable" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Dismissible" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Divider" style="TextTheme.BODY_MEDIUM" />
+        <Text value="ExpansionPanelList" style="TextTheme.BODY_MEDIUM" />
+        <Text value="ExpansionTile" style="TextTheme.BODY_MEDIUM" />
+        <Text value="GridView" style="TextTheme.BODY_MEDIUM" />
+        <Text value="ListTile" style="TextTheme.BODY_MEDIUM" />
+        <Text value="ListView" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Page" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Pagelet" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Placeholder" style="TextTheme.BODY_MEDIUM" />
+        <Text value="ReorderableListView" style="TextTheme.BODY_MEDIUM" />
+        <Text value="ResponsiveRow" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Row" style="TextTheme.BODY_MEDIUM" />
+        <Text value="SafeArea" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Stack" style="TextTheme.BODY_MEDIUM" />
+        <Text value="Tabs" style="TextTheme.BODY_MEDIUM" />
+        <Text value="VerticalDivider" style="TextTheme.BODY_MEDIUM" />
+        <Text value="View" style="TextTheme.BODY_MEDIUM" />
+    </ListView> -->
+    
+    <!-- <Text value="Navigation Components" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="AppBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="BottomAppBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoAppBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoNavigationBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="MenuBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="NavigationBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="NavigationDrawer" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="NavigationRail" style=ThemeTextTheme.BODY_MEDIUM />
+    ] />
+    
+    <Text value="Information Displays" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="Ads" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Canvas" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CircleAvatar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoActivityIndicator" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Icon" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Image" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Map" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Markdown" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Text" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="ProgressBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="ProgressRing" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="WebView" style=ThemeTextTheme.BODY_MEDIUM />
+    ] />
+    
+    <Text value="Buttons" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="Cupertino" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoFilled" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Elevated" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Filled" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Filled Tonal" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Floating Action" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Icon Button" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Outlined" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Popup Menu" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Text Button" style=ThemeTextTheme.BODY_MEDIUM />
+    ] />
+    
+    <Text value="Input and Selections" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="AutoComplete" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="AutofillGroup" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Checkbox" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Chip" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoCheckbox" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoRadio" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoSlider" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoSwitch" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoTextField" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Dropdown" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="DropdownM2" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Radio" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="RangeSlider" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="SearchBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Slider" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Switch" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="TextField" style=ThemeTextTheme.BODY_MEDIUM />
+    ] />
+    
+    <Text value="Dialogs Alerts and Panels" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="AlertDialog" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Banner" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="BottomSheet" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoActionSheet" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoAlertDialog" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoBottomSheet" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoContextMenu" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoDatePicker" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoPicker" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="CupertinoTimerPicker" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="DatePicker" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="SnackBar" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="TimePicker" style=ThemeTextTheme.BODY_MEDIUM />
+    ] />
+    
+    <Text value="Charts" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="BarChart" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="LineChart" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="MatplotlibChart" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="PieChart" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="PlotlyChart" style=ThemeTextTheme.BODY_MEDIUM />
+    ] />
+    
+    <Text value="Animations" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="AnimatedSwitcher" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Lottie" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Rive" style=ThemeTextTheme.BODY_MEDIUM />
+    ] />
+    
+    <Text value="Utility" style=ThemeTextTheme.HEADLINE_SMALL />
+    <ListView controls=[
+        <Text value="Audio" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="AudioRecorder" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Draggable" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="DragTarget" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="FilePicker" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Flashlight" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="FletApp" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Geolocator" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="GestureDetector" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="HapticFeedback" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="InteractiveViewer" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="MergeSemantics" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="PermissionHandler" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="SelectionArea" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Semantics" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="SemanticsService" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="ShaderMask" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="ShakeDetector" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="TransparentPointer" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="Video" style=ThemeTextTheme.BODY_MEDIUM />
+        <Text value="WindowDragArea" style=ThemeTextTheme.BODY_MEDIUM />
+    ] /> -->
+    
+    <Row>
+        <ElevatedButton text="Voltar" />
+    </Row>
+</Column>

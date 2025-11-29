@@ -8,13 +8,18 @@ if __name__ == "__main__":
     
     # Define um ID único para a janela principal
     
+    # adapter = XMLFletAdapter(
+    #     template_name="ui.xml.j2",
+    #     handlers=handlers,
+    #     title="Teste com Jinja",
+    #     context={
+    #         "nome": "Antonio"
+    #     }
+    # )
+
     adapter = XMLFletAdapter(
-        template_name="ui.xml.j2",
-        handlers=handlers,
+        template_name="new.xml",
         title="Teste com Jinja",
-        context={
-            "nome": "Antonio"
-        }
     )
     
     # Cria uma função wrapper para registrar a janela
