@@ -2,7 +2,7 @@ import ast
 import inspect
 import logging
 import xml.etree.ElementTree as ET
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Union
 
 import flet  # type: ignore
 from flet import Page
@@ -56,7 +56,7 @@ class XMLFletAdapter:
     def __init__(
         self,
         template_name: str,
-        handlers: Dict[str, Callable],
+        handlers: Union[Dict[str, Callable], Any],
         title: str,
         templates_dir: str = "templates",
         context: Optional[Dict[str, Any]] = None,
@@ -66,7 +66,7 @@ class XMLFletAdapter:
         
         Args:
             template_name: Nome do arquivo XML/Jinja2 na pasta de templates
-            handlers: Dicionário de callbacks { "nome_handler": função }
+            handlers: Dicionário de callbacks { "nome_handler": função } ou objeto com métodos
             title: Título da janela da aplicação
             templates_dir: Diretório onde estão os templates (default: "templates")
             context: Contexto para renderização do template Jinja2
@@ -77,9 +77,6 @@ class XMLFletAdapter:
         if not template_name:
             raise ValueError("template_name não pode estar vazio")
         
-        if not isinstance(handlers, dict):
-            raise ValueError("handlers deve ser um dicionário")
-        
         self.template_name = template_name
         self.handlers = handlers
         self.title = title
@@ -88,7 +85,14 @@ class XMLFletAdapter:
         self.fields: Dict[str, Any] = {}  # Armazena referências aos campos por id/name
         self.page: Optional[Page] = None
         
-        logger.debug(f"XMLFletAdapter inicializado: template={template_name}, handlers={list(handlers.keys())}")
+        # Log dos handlers disponíveis
+        if isinstance(handlers, dict):
+            handler_names = list(handlers.keys())
+        else:
+            # Se for um objeto, lista métodos que não começam com _
+            handler_names = [name for name in dir(handlers) 
+                           if not name.startswith('_') and callable(getattr(handlers, name, None))]
+        logger.debug(f"XMLFletAdapter inicializado: template={template_name}, handlers={handler_names}")
 
     def __call__(self, page: Page) -> None:
         """
@@ -179,6 +183,35 @@ class XMLFletAdapter:
         
         # String como fallback
         return s
+
+    def _get_handler(self, handler_name: str, handlers: Optional[Union[Dict[str, Callable], Any]] = None) -> Optional[Callable]:
+        """
+        Obtém um handler pelo nome, suportando tanto dicionários quanto objetos.
+        
+        Args:
+            handler_name: Nome do handler a ser buscado
+            handlers: Dicionário de handlers ou objeto com métodos (usa self.handlers se None)
+        
+        Returns:
+            Função callback ou None se não encontrado
+        """
+        if handlers is None:
+            handlers = self.handlers
+        
+        if handlers is None:
+            return None
+        
+        # Se for um dicionário, busca diretamente
+        if isinstance(handlers, dict):
+            return handlers.get(handler_name)
+        
+        # Se for um objeto, tenta buscar como atributo/método
+        if hasattr(handlers, handler_name):
+            handler = getattr(handlers, handler_name)
+            if callable(handler):
+                return handler
+        
+        return None
 
     def _get_class(self, tag: str) -> Optional[type]:
         """
@@ -386,7 +419,7 @@ class XMLFletAdapter:
     def navigate_to(
         self,
         template_name: str,
-        handlers: Optional[Dict[str, Callable]] = None,
+        handlers: Optional[Union[Dict[str, Callable], Any]] = None,
         title: Optional[str] = None,
         context: Optional[Dict[str, Any]] = None,
     ) -> None:
@@ -483,7 +516,7 @@ class XMLFletAdapter:
         
         return wrapper
 
-    def _instantiate_element(self, elem: ET.Element, handlers: Optional[Dict[str, Callable]] = None) -> Any:
+    def _instantiate_element(self, elem: ET.Element, handlers: Optional[Union[Dict[str, Callable], Any]] = None) -> Any:
         """
         Converte um elemento XML em um widget Flet.
         
@@ -577,7 +610,7 @@ class XMLFletAdapter:
 
         # Processa eventos e cria wrappers para callbacks
         for ev_name, ev_val in event_attrs.items():
-            handler = handlers.get(ev_val) if handlers else None
+            handler = self._get_handler(ev_val, handlers)
             if handler:
                 # Cria wrapper que passa os dados dos campos
                 wrapped_handler = self._create_callback_wrapper(handler)
@@ -585,7 +618,7 @@ class XMLFletAdapter:
 
         return instance
 
-    def parse_xml_string(self, xml_string: str, handlers: Optional[Dict[str, Callable]] = None) -> List[Any]:
+    def parse_xml_string(self, xml_string: str, handlers: Optional[Union[Dict[str, Callable], Any]] = None) -> List[Any]:
         """
         Converte uma string XML em widgets Flet.
         
