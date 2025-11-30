@@ -1,6 +1,10 @@
 import xml.etree.ElementTree as ET
 from typing import Any, Dict
 
+from flet.core.page import ControlEvent
+
+from adapter import XMLFletAdapter
+
 def xml_to_dict(xml_input: str) -> Dict[str, Any]:
     """
     Converte uma string XML em um dicionário Python.

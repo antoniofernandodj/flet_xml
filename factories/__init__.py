@@ -1,4 +1,5 @@
 # [ENUM] LAYOUT: Layout
+from . import t as t
 from .layout import generate_card_component as generate_card_component
 from .layout import generate_column_component as generate_column_component
 from .layout import generate_container_component as generate_container_component
@@ -11,8 +12,6 @@ from .layout import generate_expansion_tile_component as generate_expansion_tile
 from .layout import generate_grid_view_component as generate_grid_view_component
 from .layout import generate_list_tile_component as generate_list_tile_component
 from .layout import generate_list_view_component as generate_list_view_component
-from .layout import generate_page_component as generate_page_component
-from .layout import generate_pagelet_component as generate_pagelet_component
 from .layout import generate_placeholder_component as generate_placeholder_component
 from .layout import generate_reorderable_list_view_component as generate_reorderable_list_view_component
 from .layout import generate_responsive_row_component as generate_responsive_row_component
@@ -54,6 +53,7 @@ from .buttons import generate_outlined_button_component as generate_outlined_but
 from .buttons import generate_text_button_component as generate_text_button_component
 # [ENUM] INPUT_SELECTION: InputSelection
 from .input_selection import generate_auto_complete_component as generate_auto_complete_component
+from .input_selection import generate_dropdown_option_component as generate_dropdown_option_component
 from .input_selection import generate_autofill_group_component as generate_autofill_group_component
 from .input_selection import generate_checkbox_component as generate_checkbox_component
 from .input_selection import generate_chip_component as generate_chip_component
@@ -118,7 +118,8 @@ from .utility import generate_video_component as generate_video_component
 from .utility import generate_window_drag_area_component as generate_window_drag_area_component
 
 
-factory_mapper = {
+
+FACTORY_MAPPER = {
   # [ENUM] LAYOUT: Layout
   "Card": generate_card_component,
   "Column": generate_column_component,
@@ -132,8 +133,6 @@ factory_mapper = {
   "GridView": generate_grid_view_component,
   "ListTile": generate_list_tile_component,
   "ListView": generate_list_view_component,
-  "Page": generate_page_component,
-  "Pagelet": generate_pagelet_component,
   "Placeholder": generate_placeholder_component,
   "ReorderableListView": generate_reorderable_list_view_component,
   "ResponsiveRow": generate_responsive_row_component,
@@ -143,6 +142,7 @@ factory_mapper = {
   "Tabs": generate_tabs_component,
   "VerticalDivider": generate_vertical_divider_component,
   "View": generate_view_component,
+
   # [ENUM] NAVIGATION: Navigation
   "AppBar": generate_app_bar_component,
   "BottomAppBar": generate_bottom_app_bar_component,
@@ -152,6 +152,7 @@ factory_mapper = {
   "NavigationBar": generate_navigation_bar_component,
   "NavigationDrawer": generate_navigation_drawer_component,
   "NavigationRail": generate_navigation_rail_component,
+
   # [ENUM] INFO_DISPLAY: InfoDisplay
   "Canvas": generate_canvas_component,
   "CircleAvatar": generate_circle_avatar_component,
@@ -163,6 +164,7 @@ factory_mapper = {
   "ProgressBar": generate_progress_bar_component,
   "ProgressRing": generate_progress_ring_component,
   "WebView": generate_web_view_component,
+
   # [ENUM] BUTTONS: Buttons
   "CupertinoButton": generate_cupertino_button_component,
   "CupertinoFilledButton": generate_cupertino_filled_button_component,
@@ -173,6 +175,7 @@ factory_mapper = {
   "IconButton": generate_icon_button_component,
   "OutlinedButton": generate_outlined_button_component,
   "TextButton": generate_text_button_component,
+
   # [ENUM] INPUT_SELECTION: InputSelection
   "AutoComplete": generate_auto_complete_component,
   "AutofillGroup": generate_autofill_group_component,
@@ -185,12 +188,14 @@ factory_mapper = {
   "CupertinoTextField": generate_cupertino_text_field_component,
   "Dropdown": generate_dropdown_component,
   "DropdownM2": generate_dropdown_m2_component,
+  "dropdown.Option": generate_dropdown_option_component,
   "Radio": generate_radio_component,
   "RangeSlider": generate_range_slider_component,
   "SearchBar": generate_search_bar_component,
   "Slider": generate_slider_component,
   "Switch": generate_switch_component,
   "TextField": generate_text_field_component,
+
   # [ENUM] DIALOGS: Dialogs
   "AlertDialog": generate_alert_dialog_component,
   "Banner": generate_banner_component,
@@ -205,16 +210,19 @@ factory_mapper = {
   "DatePicker": generate_date_picker_component,
   "SnackBar": generate_snack_bar_component,
   "TimePicker": generate_time_picker_component,
+
   # [ENUM] CHATS: Charts
   "BarChart": generate_bar_chart_component,
   "LineChart": generate_line_chart_component,
   "MatplotlibChart": generate_matplotlib_chart_component,
   "PieChart": generate_pie_chart_component,
   "PlotlyChart": generate_plotly_chart_component,
+
   # [ENUM] ANIMATIONS: Animations
   "AnimatedSwitcher": generate_animated_switcher_component,
   "Lottie": generate_lottie_component,
   "Rive": generate_rive_component,
+
   # [ENUM] UTILITY: Utility
   "Audio": generate_audio_component,
   "AudioRecorder": generate_audio_recorder_component,

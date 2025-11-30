@@ -1,11 +1,13 @@
-import flet as ft
 from . import t
-
-# [ENUM] ANIMATIONS: Animations
+from flet import (
+    AnimatedSwitcher,
+    Lottie,
+    Rive
+)
 
 
 def generate_animated_switcher_component(options: t.Options) -> t.Any:
-    return ft.AnimatedSwitcher(
+    return AnimatedSwitcher(
         content=options.get("content"),
         duration=options.get("duration", 300),
         reverse_duration=options.get("reverse_duration", 300),
@@ -15,7 +17,7 @@ def generate_animated_switcher_component(options: t.Options) -> t.Any:
 
 
 def generate_lottie_component(options: t.Options) -> t.Any:
-    return ft.Lottie(
+    return Lottie(
         src=options.get("src"),
         repeat=options.get("repeat", True),
         reverse=options.get("reverse", False),
@@ -29,7 +31,7 @@ def generate_lottie_component(options: t.Options) -> t.Any:
 
 
 def generate_rive_component(options: t.Options) -> t.Any:
-    return ft.Rive(
+    return Rive(
         src=options.get("src"),
         artboard=options.get("artboard"),
         animation=options.get("animation"),

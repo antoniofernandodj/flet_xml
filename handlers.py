@@ -1,16 +1,23 @@
-import flet  # type: ignore
+from flet import ControlEvent, Page
 
 class Handlers:
-    def on_submit(self, e: flet.ControlEvent, field_data: dict = None):
-        """
-        Callback que recebe os dados dos campos automaticamente.
-        Valida os dados e navega para a página de sucesso se tudo estiver correto.
-        """
+    def on_rerender(self, e: ControlEvent, field_data: dict = None):
+        context = {
+            "paises": [
+                {"nome": "Brasil", "sigla": "br"},
+                {"nome": "Estados Unidos", "sigla": "us"},
+                {"nome": "Portugal", "sigla": "pt"},
+                {"nome": "Argentina", "sigla": "ar"},
+                {"nome": "Japão", "sigla": "jp"}
+            ]
+        }
+        e.page.adapter.rerender(context)
+
+    def on_submit(self, e: ControlEvent, field_data: dict = None):
         if not field_data:
             print("⚠️  Nenhum dado recebido!")
             return
 
-        # Validação dos campos
         errors = []
         if not field_data.get('nome') or not str(field_data.get('nome', '')).strip():
             errors.append("Nome é obrigatório!")
@@ -19,152 +26,100 @@ class Handlers:
         if not field_data.get('termos'):
             errors.append("Você deve aceitar os termos de uso!")
 
-        # Se houver erros, exibe e não prossegue
         if errors:
             print("⚠️  Erros de validação:")
             for error in errors:
                 print(f"  - {error}")
             return
 
-        # Cadastro válido - navega para página de sucesso
         print("=== Cadastro realizado com sucesso! ===")
         for field_id, value in field_data.items():
             print(f"{field_id}: {value}")
         print("=" * 30)
 
-        # Acessa o adapter através da página
-        adapter = None
-        if hasattr(e.control.page, 'data') and isinstance(e.control.page.data, dict):
-            adapter = e.control.page.data.get('adapter')
+
+        pais_nome = None
+        if field_data.get('pais'):
+            paises_map = {
+                "br": "Brasil",
+                "us": "Estados Unidos",
+                "pt": "Portugal",
+                "ar": "Argentina",
+                "jp": "Japão"
+            }
+            pais_nome = paises_map.get(field_data['pais'], field_data['pais'])
         
-        if adapter:
-            # Prepara os dados para a página de sucesso
-            # Mapeia o país se existir
-            pais_nome = None
-            if field_data.get('pais'):
-                # Se for uma sigla, tenta encontrar o nome
-                paises_map = {
-                    "br": "Brasil",
-                    "us": "Estados Unidos",
-                    "pt": "Portugal",
-                    "ar": "Argentina",
-                    "jp": "Japão"
-                }
-                pais_nome = paises_map.get(field_data['pais'], field_data['pais'])
-            
-            success_context = {
+        success_context = {
+            "nome": field_data.get('nome', ''),
+            "dados": {
                 "nome": field_data.get('nome', ''),
-                "dados": {
-                    "nome": field_data.get('nome', ''),
-                    "email": field_data.get('email', ''),
-                    "pais": pais_nome
-                }
+                "email": field_data.get('email', ''),
+                "pais": pais_nome
             }
-            
-            # Navega para a página de sucesso
-            adapter.navigate_to(
-                template_name="success.xml.j2",
-                title="Cadastro Realizado",
-                context=success_context
-            )
-        else:
-            print("⚠️  Erro: adapter não encontrado!")
-
-    def on_clear(self, e: flet.ControlEvent, field_data: dict = None):
-        """Limpa os campos do formulário"""
-        # Acessa o adapter através da página
-        adapter = None
-        if hasattr(e.control.page, 'data') and isinstance(e.control.page.data, dict):
-            adapter = e.control.page.data.get('adapter')
+        }
         
-        if adapter:
-            # Usa o método utilitário do adapter
-            cleared = adapter.clear_fields()
-            print(f"✅ {cleared} campo(s) limpo(s)!")
-        else:
-            print("⚠️  Erro: adapter não encontrado!")
+        e.page.adapter.navigate_to(
+            template_name="success.xml.j2",
+            title="Cadastro Realizado",
+            context=success_context
+        )
 
-    def on_exit(self, e: flet.ControlEvent):
-        page: flet.Page = e.control.page
-        page.window.close()
 
-    def on_back(self, e: flet.ControlEvent):
-        """Volta para a página inicial de cadastro"""
-        adapter = None
-        if hasattr(e.control.page, 'data') and isinstance(e.control.page.data, dict):
-            adapter = e.control.page.data.get('adapter')
-        
-        if adapter:
-            adapter.navigate_to(
-                template_name="ui.xml.j2",
-                title="Teste com Jinja",
-                context={"nome": "Antonio"}
-            )
-        else:
-            print("⚠️  Erro: adapter não encontrado!")
+    def on_clear(self, e: ControlEvent, field_data: dict = None):
+        cleared = e.page.adapter.clear_fields()
+        print(f"✅ {cleared} campo(s) limpo(s)!")
+
+
+    def on_exit(self, e: ControlEvent):
+        e.control.page.window.close()
+
+    def on_back(self, e: ControlEvent):
+        e.page.adapter.navigate_to(
+            template_name="ui.xml.j2",
+            title="Teste com Jinja",
+            context={"nome": "Antonio"}
+        )
+
     
-    def on_open_new_window(self, e: flet.ControlEvent, field_data: dict = None):
-        """
-        Exemplo: Abre uma nova janela com a página de sucesso (mantém a janela atual aberta).
-        """
-        adapter = None
-        if hasattr(e.control.page, 'data') and isinstance(e.control.page.data, dict):
-            adapter = e.control.page.data.get('adapter')
-        
-        if adapter:
-            # Prepara contexto para a nova janela
-            context = {
-                "nome": field_data.get('nome', 'Visitante') if field_data else "Visitante",
-                "dados": {
-                    "nome": field_data.get('nome', '') if field_data else '',
-                    "email": field_data.get('email', '') if field_data else '',
-                }
+    def on_open_new_window(self, e: ControlEvent, field_data: dict = None):
+        context = {
+            "nome": field_data.get('nome', 'Visitante') if field_data else "Visitante",
+            "dados": {
+                "nome": field_data.get('nome', '') if field_data else '',
+                "email": field_data.get('email', '') if field_data else '',
             }
-            
-            # Abre uma nova janela (a janela atual permanece aberta)
-            window_id = adapter.open_window(
-                template_name="success.xml.j2",
-                title="Nova Janela - Sucesso",
-                context=context,
-                width=600,
-                height=500
-            )
-            
-            if window_id:
-                print(f"✅ Nova janela '{window_id}' aberta!")
-            else:
-                print("⚠️  Erro ao abrir nova janela!")
+        }
+        
+        window_id = e.page.adapter.open_window(
+            template_name="success.xml.j2",
+            title="Nova Janela - Sucesso",
+            context=context,
+            width=600,
+            height=500
+        )
+        
+        if window_id:
+            print(f"✅ Nova janela '{window_id}' aberta!")
         else:
-            print("⚠️  Erro: adapter não encontrado!")
+            print("⚠️  Erro ao abrir nova janela!")
+
     
-    def on_replace_window(self, e: flet.ControlEvent, field_data: dict = None):
-        """
-        Exemplo: Substitui a janela atual pela página de sucesso.
-        """
-        adapter = None
-        if hasattr(e.control.page, 'data') and isinstance(e.control.page.data, dict):
-            adapter = e.control.page.data.get('adapter')
-        
-        if adapter:
-            # Prepara contexto para substituir a janela
-            context = {
-                "nome": field_data.get('nome', 'Visitante') if field_data else "Visitante",
-                "dados": {
-                    "nome": field_data.get('nome', '') if field_data else '',
-                    "email": field_data.get('email', '') if field_data else '',
-                }
+    def on_replace_window(self, e: ControlEvent, field_data: dict = None):
+        context = {
+            "nome": field_data.get('nome', 'Visitante') if field_data else "Visitante",
+            "dados": {
+                "nome": field_data.get('nome', '') if field_data else '',
+                "email": field_data.get('email', '') if field_data else '',
             }
-            
-            # Substitui a janela atual
-            success = adapter.replace_current_window(
-                template_name="success.xml.j2",
-                title="Janela Substituída - Sucesso",
-                context=context
-            )
-            
-            if success:
-                print("✅ Janela atual substituída!")
-            else:
-                print("⚠️  Erro ao substituir janela!")
+        }
+        
+        success = e.page.adapter.replace_current_window(
+            template_name="success.xml.j2",
+            title="Janela Substituída - Sucesso",
+            context=context
+        )
+        
+        if success:
+            print("✅ Janela atual substituída!")
         else:
-            print("⚠️  Erro: adapter não encontrado!")
+            print("⚠️  Erro ao substituir janela!")

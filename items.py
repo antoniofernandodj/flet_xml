@@ -378,9 +378,3 @@ def walk_enum(e):
             # Caso seja um item normal (str, int, ...)
             # print(f"{e.__name__}.{member.name} = {member.value}")
             generate_def(member.value)
-
-
-print(f"{{")
-walk_enum(Controls)
-
-print(f"}}")
