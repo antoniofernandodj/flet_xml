@@ -179,15 +179,15 @@ class InfoDisplay(Enum):
 
 
 class Buttons(Enum):
-    CUPERTINO: Annotated[str, "iOS style button."] = "Cupertino"
-    CUPERTINO_FILLED: Annotated[str, "iOS filled button."] = "CupertinoFilled"
-    ELEVATED: Annotated[str, "Material elevated button."] = "Elevated"
-    FILLED: Annotated[str, "Material filled button."] = "Filled"
-    FILLED_TONAL: Annotated[str, "Material filled tonal button."] = "FilledTonal"
-    FLOATING_ACTION: Annotated[str, "Floating action button."] = "FloatingAction"
+    CUPERTINO: Annotated[str, "iOS style button."] = "CupertinoButton"
+    CUPERTINO_FILLED: Annotated[str, "iOS filled button."] = "CupertinoFilledButton"
+    ELEVATED: Annotated[str, "Material elevated button."] = "ElevatedButton"
+    FILLED: Annotated[str, "Material filled button."] = "FilledButton"
+    FILLED_TONAL: Annotated[str, "Material filled tonal button."] = "FilledTonalButton"
+    FLOATING_ACTION: Annotated[str, "Floating action button."] = "FloatingActionButton"
     ICON_BUTTON: Annotated[str, "Button with an icon."] = "IconButton"
-    OUTLINED: Annotated[str, "Material outlined button."] = "Outlined"
-    POPUP_MENU: Annotated[str, "Button that opens a menu."] = "PopupMenu"
+    OUTLINED: Annotated[str, "Material outlined button."] = "OutlinedButton"
+    # POPUP_MENU: Annotated[str, "Button that opens a menu."] = "PopupMenu"
     TEXT_BUTTON: Annotated[str, "Borderless text button."] = "TextButton"
 
 
@@ -344,156 +344,43 @@ class Controls(Enum):
 
 
 
-def _search_enum_recursive(enum_cls: type[Enum], target: str) -> Optional[Enum]:
-    """
-    Busca dentro de enum_cls por:
-      - member.name (ex: 'CARD')
-      - member.value (ex: 'Card')
-    E desce recursivamente se member.value for um Enum (classe).
-    Retorna o membro encontrado ou None.
-    """
-    target_low = target.lower()
-
-    for member in enum_cls:
-        # 1) comparar pelo nome do membro (CARD)
-        if member.name.lower() == target_low:
-            return member
-
-        # 2) comparar pelo valor do membro se for string ("Card")
-        val = member.value
-        if isinstance(val, str) and val.lower() == target_low:
-            return member
-
-        # 3) se o valor for uma classe Enum, procurar recursivamente dentro dela
-        if isinstance(val, type) and issubclass(val, Enum):
-            found = _search_enum_recursive(val, target)
-            if found:
-                return found
-
-    return None
+from enum import Enum
 
 
-def get_enum_by_name(name: str):
-    """
-    Busca um membro Enum pelos formatos:
-      - "CARD"                 -> encontra Layout.CARD (procura em todos os enums dentro de Controls)
-      - "Card"                 -> encontra Layout.CARD (compara pelo value)
-      - "Layout.CARD"          -> busca especificamente dentro do enum Layout
-      - "Layout.Card"          -> idem
-      - "Controls.Layout.CARD" -> também funciona (procura o enum Layout dentro de Controls)
-    Retorna o membro Enum encontrado (por exemplo Layout.CARD) ou lança ValueError.
-    """
-    if not isinstance(name, str) or not name:
-        raise ValueError("name deve ser uma string não vazia")
-
-    # se veio no formato "Categoria.Membro" -> procurar categoria primeiro
-    if "." in name:
-        first, rest = name.split(".", 1)
-        first_low = first.lower()
-
-        # procurar qual enum dentro de Controls corresponde à primeira parte
-        for top in Controls:
-            top_val = top.value
-            # top_val pode ser uma classe Enum (Layout, Navigation, ...)
-            if isinstance(top_val, type) and issubclass(top_val, Enum):
-                # comparar pelo nome da classe (Layout) ou pelo nome do membro Controls (LAYOUT)
-                if top_val.__name__.lower() == first_low or top.name.lower() == first_low:
-                    # agora buscar dentro do enum encontrado
-                    res = _search_enum_recursive(top_val, rest)
-                    if res:
-                        return res
-
-        # Se não achou o enum correspondente à primeira parte, tentar interpretar
-        # como "EnumClass.Member" sem passar por Controls (ex: "Layout.CARD")
-        # procura no módulo global por classe com nome `first`
-        # (opcional: se não quiser essa heurística, pode remover)
-        enum_cls = globals().get(first)
-        if isinstance(enum_cls, type) and issubclass(enum_cls, Enum):
-            res = _search_enum_recursive(enum_cls, rest)
-            if res:
-                return res
-
-        raise ValueError(f"Categoria/enumeration '{first}' não encontrada dentro de Controls.")
-
-    # sem ponto: procurar em todo o Controls recursivamente
-    found = _search_enum_recursive(Controls, name)
-    if found:
-        return found
-
-    raise ValueError(f"Enum/member '{name}' não encontrado em Controls.")
+def pascal_case_to_snake_case(string: str) -> str:
+    # Coloca underscore entre:
+    # 1) letra minúscula/numero seguido de letra maiúscula  → aA, 1A
+    # 2) sequências tipo: ABCWord → ABC_Word
+    import re
+    string = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
+    string = re.sub('([a-z0-9])([A-Z])', r'\1_\2', string)
+    return string.lower()
 
 
-print(get_enum_by_name("CARD"))           # -> Layout.CARD
-print(get_enum_by_name("Card"))           # -> Layout.CARD
-print(get_enum_by_name("Layout.CARD"))    # -> Layout.CARD
-print(get_enum_by_name("Navigation.AppBar"))  # -> Navigation.APP_BAR (também aceita value)
-print(get_enum_by_name("AppBar")) 
+def generate_def(enum: str):
+
+    enum_name = pascal_case_to_snake_case(enum)
+
+    print(f'  "{enum}": generate_{enum_name}_component,')
 
 
+def walk_enum(e):
+    """Percorre recursivamente enums aninhados e imprime todos os valores."""
+    if not issubclass(e, Enum):
+        return
+
+    for member in e:
+        if isinstance(member.value, type) and issubclass(member.value, Enum):
+            # Caso seja um Enum dentro de outro Enum
+            print(f"  # [ENUM] {member.name}: {member.value.__name__}")
+            walk_enum(member.value)
+        else:
+            # Caso seja um item normal (str, int, ...)
+            # print(f"{e.__name__}.{member.name} = {member.value}")
+            generate_def(member.value)
 
 
+print(f"{{")
+walk_enum(Controls)
 
-ControlsType = Union[
-    Layout,
-    Navigation,
-    InfoDisplay,
-    Buttons,
-    InputSelection,
-    Dialogs,
-    Charts,
-    Animations,
-    Utility,
-]
-
-def _generate_flet_class_map() -> Dict[str, Any]:
-    class_map = {}
-    for enum_class in ControlsType.__args__:
-        for item in enum_class:
-            class_map[item.value] = getattr(ft, item.value, None)
-    return class_map
-
-
-FLET_CLASS_MAP = _generate_flet_class_map()
-print(FLET_CLASS_MAP)
-
-
-def build_flet_control(control: ControlsType, options: dict):
-
-    control_name = control.value
-    cls = FLET_CLASS_MAP.get(control_name)
-
-    if cls is None:
-        raise ValueError(
-            f"O controle '{control_name}' existe no seu Enum, "
-            f"mas não existe no módulo flet. "
-            f"Verifique se foi importado ou se o nome está correto."
-        )
-
-    try:
-        return cls(**options)
-    except TypeError as e:
-        raise TypeError(
-            f"Erro ao instanciar {control_name} com argumentos {options}. "
-            f"Detalhes: {e}"
-        )
-
-c = build_flet_control(
-    Layout.CONTAINER,
-    {"padding": 20, "bgcolor": "red", "content": ft.Text("Olá!")}
-)
-
-# grid = build_flet_control(
-#     Layout.GRID_VIEW,
-#     {"runs_count": 3, "spacing": 10, "children": [ft.Text(str(i)) for i in range(9)]}
-# )
-
-# btn = build_flet_control(
-#     Buttons.ELEVATED,
-#     {"text": "Clique aqui", "on_click": lambda e: print("Clicado!")}
-# )
-
-# dialog = build_flet_control(
-#     Dialogs.ALERT_DIALOG,
-#     {"title": ft.Text("Alerta"), "content": ft.Text("Mensagem...")}
-# )
-
+print(f"}}")
